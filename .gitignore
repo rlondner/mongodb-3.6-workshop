@@ -57,3 +57,4 @@ typings/
 # dotenv environment variables file
 .env
 
+labs/change-streams/shell/data/rs1/db

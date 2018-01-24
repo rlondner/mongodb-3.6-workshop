@@ -11,3 +11,4 @@ MongoDB Change Streams require a replica set to work (i.e. they don't work with 
 1. Stop the `insertChangeStream.sh` script and the `mongo createProducts.js` process (with `Ctrl+C`).
 1. Run `sh updateChangeStream.sh` in a Terminal console to monitor quantity updates of documents in the `stock` collection. Specifically, this change stream only prints out document updates when the `quantity` attributes is set to a value lower or equal than 10.
 1. Run `mongo updateProducts.js` to trigger `quantity` updates below 10 and watch changes being logged in the `sh updateChangeStream.sh` window.
+1. Once you are done, kill your MongoDB 3.6 instance.

@@ -1,4 +1,4 @@
-conn = new Mongo("mongodb://localhost:27017,localhost:27018,localhost:27019/demo?replicaSet=rs");
+conn = new Mongo("mongodb://localhost:27017/demo?replicaSet=rs");
 db = conn.getDB("demo");
 collection = db.stock;
 
@@ -56,7 +56,7 @@ const changeStreamCursor = collection.watch([
 ]);
 
 //pollStream(changeStreamCursor);
-resumeStream(changeStream, true);
+resumeStream(changeStreamCursor, true);
 
 //this function polls a change stream and prints out each change as it comes in
 function pollStream(cursor) {
