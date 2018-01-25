@@ -2,7 +2,7 @@
 
 var Config  = {
     listenPort: 3000,
-    connectionString: "mongodb://localhost:27000/market?replicaSet=replset",
+    connectionString: "mongodb://localhost:27017/market?replicaSet=rs",
     collectionName: "prices",
     dbName: "market",
     kafka: {

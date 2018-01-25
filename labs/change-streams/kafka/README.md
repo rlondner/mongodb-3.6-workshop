@@ -1,4 +1,4 @@
-# MongoDB 3.6 Change Streams and Apache Kafka
+# MongoDB Change Streams - Node with Apache Kafka Lab
 
 This example application uses the new MongoDB 3.6 change streams feature to send messages to a Kafka broker. These messages are consumed and displayed by a separate web application. The application does the following:
 
@@ -26,38 +26,20 @@ Install Node.js packages:
 
 [Start Zookeeper (optional) and Kafka](https://kafka.apache.org/quickstart) with Kafka listening on `localhost:9092`. You may also use Confluent with the default command `confluent start`.
 
-If necessary, edit configuration options in [config.js](config.js)
+If necessary, edit configuration options in [config.js](config.js) s
 
-Start a MongoDB replica set with version 3.6.0 or higher. This example uses one node as an example, but a production replica set should always have at least 3 nodes. See [Deploying a Replica Set](https://docs.mongodb.com/manual/tutorial/deploy-replica-set/).
-
-```shell
-mkdir -p data/rs1/db
-mongod --dbpath data/rs1/db --port 27000 --enableMajorityReadConcern --replSet replset
-
-````
-Start a Mongo shell with
-
-        mongo --port 27000
-
-In the Mongo shell, enter the following to create the MongoDB replica set:
-
-```javascript
-rsconf = {
-  _id: "replset",
-  members: [
-    {
-     _id: 0,
-     host: "localhost:27000"
-    }
-   ]
-}
-
-rs.initiate( rsconf )
-```
+1. Make sure [MongoDB 3.6+](https://www.mongodb.com/download-center#production) is installed and your machine and the MongoDB installation folder (containing tools such as `mongo` and `mongod`) is added to your local path.
+1. From a Terminal/Bash console, navigate to the `shell` directory using `cd labs/change-streams/kafka`.
+1. Run `sh startRS.sh` to start a test, single-node replica set (in the `/data/rs1/db` sub-folder).
+1. If you've started your replica set for the first time, run `sh initiateRS.sh` (in a separate bash console) to initialize your replica set.
 
 In the `bin` folder of your Kafka installation, run the following to create the `market-data` topics in 3 partitions (one for each of the 3 stocks we're tracking - MSFT, GOOG and FB):
 
-        kafka-topics.sh --create --zookeeper localhost:2181 --topic market-data --replication-factor 1 --partitions 3
+    kafka-topics.sh --create --zookeeper localhost:2181 --topic market-data --replication-factor 1 --partitions 3
+
+If you use Confluent, you should type instead:
+
+    kafka-topics --create --zookeeper localhost:2181 --topic market-data --replication-factor 1 --partitions 3
 
 
 Start the Kafka Producer:
@@ -74,7 +56,7 @@ Visit http://localhost:3000 to watch data.
 
 The file [loadFiles.js](loadFiles.js) reads from JSON data files and inserts into a MongoDB collection at a given interval. Because this is time-series data, each document is structured in a nested format to optimize retrieval. The `_id` key is the combination of the stock symbol and the current day.
 
-```js
+```json
 {
     "_id" : {
         "symbol" : "MSFT",
@@ -102,7 +84,7 @@ The file [loadFiles.js](loadFiles.js) reads from JSON data files and inserts int
 
 The change stream documents from MongoDB take the following format. We will use the `symbol` from the `documentKey._id` to map to a Kafka partition, where each stock symbol has its own partition. We will parse the `updatedFields` as the body of the message sent to Kafka, which is later consumed by our web application.
 
-```js
+```json
 {
   "_id": {
     "_data": "gloN1/UAAAAGRkZfaWQARjxzeW1ib2wAPE1TRlQAeGRheQB4gAABX8IgCAAAAFoQBOHWRLjzyEvutTsXq0MfFjsE"
@@ -136,32 +118,33 @@ The change stream documents from MongoDB take the following format. We will use 
 
 
 The following excerpt from [kafkaProducer.js](kafkaProducer.js) uses change streams to send messages to a Kafka broker. The function `getMessageFromChange`, parses the change stream event into a message for Kafka. This includes the partition of the symbol, the key (date), and value (stock symbol and closing price).
-```js
-producer.on('ready', function() {
 
-    // Create change stream that responds to updates, inserts, and replaces.
-    collection.watch([{
-        $match: {
-            operationType: { $in: ['update', 'insert', 'replace'] }
-        }
-    }]).on('change', function(c) {
+    ```js
+    producer.on('ready', function() {
 
-        // Parse data and add fields
-        getMessageFromChange(c).then(message => {
+        // Create change stream that responds to updates, inserts, and replaces.
+        collection.watch([{
+            $match: {
+                operationType: { $in: ['update', 'insert', 'replace'] }
+            }
+        }]).on('change', function(c) {
 
-            // Send to Kafka broker
-            producer.send([{
-                topic: config.kafka.topic,
-                partition: message.partition,
-                messages: new kafka.KeyedMessage(message.key, JSON.stringify(message.value))
-            }], function (err, data) {
-                if (err) console.log(err);
+            // Parse data and add fields
+            getMessageFromChange(c).then(message => {
+
+                // Send to Kafka broker
+                producer.send([{
+                    topic: config.kafka.topic,
+                    partition: message.partition,
+                    messages: new kafka.KeyedMessage(message.key, JSON.stringify(message.value, null, 2))
+                }], function (err, data) {
+                    if (err) console.log(err);
+                });
+
+            }).catch(err => {
+                console.log("Unable to parse change event: ", err);
             });
 
-        }).catch(err => {
-            console.log("Unable to parse change event: ", err);
         });
-
     });
-});
-```
+    ```
