@@ -22,7 +22,7 @@ MongoDB Change Streams require a replica set to work (i.e. they don't work with 
             if (cursor.hasNext()) {
             change = cursor.next();
             //this is where you should insert your change stream processing logic - in this demo example, we're simply printing the change stream JSON document to the console
-            print(JSON.stringify(change));
+            print(JSON.stringify(change, null, 2));
             }
         }
         pollStream(cursor);
@@ -46,7 +46,7 @@ MongoDB Change Streams require a replica set to work (i.e. they don't work with 
     while (!cursor.isExhausted()) {
         if (cursor.hasNext()) {
         change = cursor.next();
-        print(JSON.stringify(change));
+        print(JSON.stringify(change, null, 2));
         resumeToken = change._id;
         if (forceResume === true) {
             print("\r\nSimulating app failure for 10 seconds...");
@@ -60,7 +60,7 @@ MongoDB Change Streams require a replica set to work (i.e. they don't work with 
             );
             print(
             "\r\nResuming change stream with token " +
-                JSON.stringify(resumeToken) +
+                JSON.stringify(resumeToken, null, 2); +
                 "\r\n"
             );
             resumeStream(newChangeStreamCursor);

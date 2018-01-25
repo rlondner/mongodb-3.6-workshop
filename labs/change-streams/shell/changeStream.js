@@ -6,7 +6,7 @@ const insertOps = {
   $match: { operationType: "insert" }
 };
 
-const updateOps;
+const updateOps=null;
 
 const changeStreamCursor = collection.watch([
   csFilter === 0 ? insertOps : updateOps

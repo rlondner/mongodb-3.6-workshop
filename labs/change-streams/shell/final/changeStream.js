@@ -27,7 +27,7 @@ function pollStream(cursor) {
   while (!cursor.isExhausted()) {
     if (cursor.hasNext()) {
       change = cursor.next();
-      print(JSON.stringify(change));
+      print(JSON.stringify(change, null, 2));
     }
   }
   pollStream(cursor);
@@ -39,7 +39,7 @@ function resumeStream(cursor, forceResume = false) {
   while (!cursor.isExhausted()) {
     if (cursor.hasNext()) {
       change = cursor.next();
-      print(JSON.stringify(change));
+      print(JSON.stringify(change, null, 2));
       resumeToken = change._id;
       if (forceResume === true) {
         print("\r\nSimulating app failure for 10 seconds...");
@@ -53,7 +53,7 @@ function resumeStream(cursor, forceResume = false) {
         );
         print(
           "\r\nResuming change stream with token " +
-            JSON.stringify(resumeToken) +
+            JSON.stringify(resumeToken, null, 2) +
             "\r\n"
         );
         resumeStream(newChangeStreamCursor);
