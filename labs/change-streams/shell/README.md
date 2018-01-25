@@ -1,4 +1,4 @@
-# MongoDB Change Streams Shell examples
+# MongoDB Change Streams - Mongo Shell Lab
 
 ## Replica set setup
 
@@ -7,7 +7,7 @@ MongoDB Change Streams require a replica set to work (i.e. they don't work with 
 1. Make sure [MongoDB 3.6+](https://www.mongodb.com/download-center#production) is installed and your machine and the MongoDB installation folder (containing tools such as `mongo` and `mongod`) is added to your local path.
 1. From a Terminal/Bash console, navigate to the `shell` directory using `cd labs/change-streams/shell`.
 1. Run `sh startRS.sh` to start a test, single-node replica set (in the `/data/rs1/db` sub-folder).
-1. If you've started your replica set for the first time, run `sh initiateRS.sh` to initialize your replica set.
+1. If you've started your replica set for the first time, run `sh initiateRS.sh` (in a separate bash console) to initialize your replica set.
 1. Explore the `createProducts.js` script and uncomment line 22 to make sure the quantity for each inserted product is greater or equal than 11.
 1. Run `mongo createProducts.js` to create products (one every second) in the `stock` collection of the `demo` database in your replica set. All of the documents created with that script should have a `quantity` attribute greater or equal than 11 (you can use [MongoDB Compass](https://www.mongodb.com/download-center#compass) to check the inserted data).
 1. Edit `changeStream.js` and replace

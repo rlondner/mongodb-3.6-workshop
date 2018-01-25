@@ -58,3 +58,6 @@ typings/
 .env
 
 labs/change-streams/shell/data/rs1/db
+labs/change-streams/node/data/rs1/db
+labs/change-streams/node/localStorage
+labs/change-streams/node/final/localStorage

@@ -3,9 +3,41 @@ const storage = require("node-persist");
 const EJSON = require("mongodb-extjson");
 const url = require("./config.js").mongoDBUrl;
 
-const matchStage = { $match: { "fullDocument.celsiusTemperature": { $gt: 15 } } };
+getValue = function (obj, f) {
+  return {
+    $let: {
+      vars: {
+        foo: {
+          $arrayElemAt: [
+            { $filter: { input: { $objectToArray: obj }, cond: { $eq: [f, "$$this.k"] } } },
+            0
+          ]
+        }
+      },
+      in: "$$foo.v"
+    }
+  };
+}
 
-let options = {
+const matchStage = {
+  $match: {
+    $or: [
+      { "fullDocument.device.celsiusTemperature": { $gt: 15 } } //necessary to capture inserts\
+      ,
+      { //necessary to capture updates without fullDocument: 'updateLookup' option
+        $expr: {
+          $gt: [
+
+            getValue("$updateDescription.updatedFields", "device.celsiusTemperature"),
+            15
+          ]
+        }
+      }
+    ]
+  }
+};
+
+const options = {
   fullDocument: "updateLookup"
 };
 
@@ -18,7 +50,7 @@ MongoClient.connect(url, (err, client) => {
   }
 
   const coll = client.db("demo").collection("devices");
-  let changeStream = coll.watch([matchStage], options);
+  let changeStream = coll.watch([matchStage]);
 
   storage.init({ dir: "localStorage" }).then(() => {
     storage
@@ -27,8 +59,9 @@ MongoClient.connect(url, (err, client) => {
       token => {
         if (token !== undefined) {
           console.log(`using resume token: ${token}`);
-          options.resumeAfter = EJSON.parse(token);
-          changeStream = coll.watch([matchStage], options);
+          changeStream = coll.watch([matchStage], {
+            resumeAfter: EJSON.parse(token)
+          });
         }
       },
       err => {
@@ -39,6 +72,7 @@ MongoClient.connect(url, (err, client) => {
         console.log("polling change stream...");
         pollStream(changeStream, storage);
       });
+    //changeStream.on("change", c => console.log(c));
   });
 });
 
@@ -47,7 +81,7 @@ function pollStream(cs, storage) {
   cs.next((err, change) => {
     if (err) return console.log(err);
     resumeToken = EJSON.stringify(change._id);
-    storage.setItem(CS_TOKEN, resumeToken);
+    storage.setItem(CS_TOKEN, resumeToken)//.then(console.log(change));
     console.log(change);
     pollStream(cs, storage);
   });

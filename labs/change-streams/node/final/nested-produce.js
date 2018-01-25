@@ -2,13 +2,17 @@ const MongoClient = require('mongodb');
 const url = require('./config.js').mongoDBUrl;
 const now = Date.now();
 let deviceName = "ecobee_1234";
-
+/*
+if(now % 2 == 0) {
+  deviceName = "nest_5678"
+}
+*/
 const doc = {
-  //device: {
+  device: {
     name: deviceName,
     celsiusTemperature: 16,
     timeStamp: new Date()
-  //}
+  }
 };
 
 MongoClient.connect(url, (err, client) => {
