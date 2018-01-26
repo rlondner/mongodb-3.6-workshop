@@ -16,6 +16,7 @@
 1. Now stop the `listen.js` process. The goal of shutting down this process manually is to simulate a random application failure and the ability to resume processing MongoDB Change Streams from the exact time the application failed.
 1. Add a few documents by running `node produce.js` several times.
 1. Start `node listen.js` again and notice that the previous documents you just added get processed right away.
+1. Run `node update.js` and look at the window running `listen.js`, you should see `listen.js` processing updates
 
 ## Lab 1 Questions
 
