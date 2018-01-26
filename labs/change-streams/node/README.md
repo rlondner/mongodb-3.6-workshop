@@ -16,11 +16,11 @@
 1. Now stop the `listen.js` process. The goal of shutting down this process manually is to simulate a random application failure and the ability to resume processing MongoDB Change Streams from the exact time the application failed.
 1. Add a few documents by running `node produce.js` several times.
 1. Start `node listen.js` again and notice that the previous documents you just added get processed right away.
-1. Run `node update.js` and look at the window running `listen.js`, you should see `listen.js` processing updates
+1. Shut dow the `produce.js` process and run `node update.js` to set the celsiusTemperature to a 23 value. Look at the window running `listen.js`, you should see `listen.js` processing updates.
 
 ## Lab 1 Questions
 
-1. Which technique does the `listen.js` Node process use to avoid missing a change stream document in case of a failure?
+1. Which caching technique does the `listen.js` Node process use to avoid missing a change stream document in the case of an app failure?
 1. How does the `listen.js` process capture both inserts and updates with one single filter?
 
     Note that this type of filter is unreliable for updates because the `fullDocument` sub-document pulls up the full document at the time the change stream cursor is queried for, not at the time the actual update is performed. This can result in the inconsistencies since the `fullDocument` property (for the `update` operations only) may not reflect the structure of the updated document __at the time of the the update__.
