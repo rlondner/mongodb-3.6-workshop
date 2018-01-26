@@ -60,7 +60,7 @@ MongoDB Change Streams require a replica set to work (i.e. they don't work with 
             );
             print(
             "\r\nResuming change stream with token " +
-                JSON.stringify(resumeToken, null, 2); +
+                JSON.stringify(resumeToken, null, 2) +
                 "\r\n"
             );
             resumeStream(newChangeStreamCursor);
