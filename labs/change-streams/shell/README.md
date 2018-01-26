@@ -74,7 +74,7 @@ MongoDB Change Streams require a replica set to work (i.e. they don't work with 
 1. Run `mongo createProducts.js` again and `sh insertChangeStream.sh` in 2 different bash consoles.
 1. Note that the script logs the first change it captures, simulates an app failure for 10 seconds and then catches up the inserts it missed (using the `resumeAfter` option).
 1. Stop the `insertChangeStream.sh` script and the `mongo createProducts.js` process.
-1. Set the `updateOps` variable to the following value:
+1. In the `changeStream.js` file, set the `updateOps` variable to the following value:
 
     ```json
     {
