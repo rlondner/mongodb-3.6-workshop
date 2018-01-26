@@ -43,5 +43,3 @@ To know more about the technical features of MongoDB’s JSON Schema Validation 
 * Take the hands-on labs available [here](https://github.com/rlondner/mongodb-3.6-workshop/tree/master/labs/json-schema-validation).
 
 * Discover how to use JSON Schema with the Expressive Query Syntax [here](https://www.mongodb.com/blog/post/mongodb-36-json-schema-validation-expressive-query-syntax) and replicate the examples mentioned there.
-
-### Expressive Query Syntax Labs
