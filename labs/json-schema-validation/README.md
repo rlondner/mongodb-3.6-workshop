@@ -15,4 +15,4 @@ The following labs are currently available:
 * [(Part 3) Advanced topic: array validation](./HOL-PART3.md)
 * [(Part 4) Advanced topic: property and schema dependencies](./HOL-PART4.md)
 
-Part 3 and 4 of this hands-on lab are available thanks to [Ken W. Alger's](https://github.com/kenwalger) contributions.
+Part 1 and 2 of this lab are available thanks to [Asya Kamsky](https://github.com/asya999)'s original content on this topic. Part 3 and 4 of this hands-on lab are available thanks to [Ken W. Alger](https://github.com/kenwalger)'s contributions.

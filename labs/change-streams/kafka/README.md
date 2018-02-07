@@ -57,6 +57,7 @@ Visit http://localhost:3000 to watch data.
 The file [loadFiles.js](loadFiles.js) reads from JSON data files and inserts into a MongoDB collection at a given interval. Because this is time-series data, each document is structured in a nested format to optimize retrieval. The `_id` key is the combination of the stock symbol and the current day.
 
 ```json
+
 {
     "_id" : {
         "symbol" : "MSFT",
@@ -85,6 +86,7 @@ The file [loadFiles.js](loadFiles.js) reads from JSON data files and inserts int
 The change stream documents from MongoDB take the following format. We will use the `symbol` from the `documentKey._id` to map to a Kafka partition, where each stock symbol has its own partition. We will parse the `updatedFields` as the body of the message sent to Kafka, which is later consumed by our web application.
 
 ```json
+
 {
   "_id": {
     "_data": "gloN1/UAAAAGRkZfaWQARjxzeW1ib2wAPE1TRlQAeGRheQB4gAABX8IgCAAAAFoQBOHWRLjzyEvutTsXq0MfFjsE"
@@ -114,12 +116,13 @@ The change stream documents from MongoDB take the following format. We will use 
     "removedFields": []
   }
 }
-```
 
+```
 
 The following excerpt from [kafkaProducer.js](kafkaProducer.js) uses change streams to send messages to a Kafka broker. The function `getMessageFromChange`, parses the change stream event into a message for Kafka. This includes the partition of the symbol, the key (date), and value (stock symbol and closing price).
 
-    ```js
+```javascript
+
     producer.on('ready', function() {
 
         // Create change stream that responds to updates, inserts, and replaces.
@@ -147,4 +150,7 @@ The following excerpt from [kafkaProducer.js](kafkaProducer.js) uses change stre
 
         });
     });
-    ```
+
+```
+
+Credits go to [Louis Williams](https://github.com/louiswilliams) for the [original version](https://github.com/louiswilliams/mongodb-kafka-changestreams) of this demo application.
