@@ -38,8 +38,12 @@ But enough with marketing spins, let’s get started with technical content. We�
 
 With MongoDB 3.6, you now can enforce schemas on specific collections using the [JSON Schema](http://json-schema.org/) draft IETF specification (note: MongoDB 3.6 currently supports a subset of the JSON Schema [draft 5](https://tools.ietf.org/html/draft-wright-json-schema-validation-00) spec).
 
-To know more about the technical features of MongoDB’s JSON Schema Validation support: 
+To know more about the technical features of MongoDB’s JSON Schema Validation support:
 
 * Take the hands-on labs available [here](https://github.com/rlondner/mongodb-3.6-workshop/tree/master/labs/json-schema-validation).
 
 * Discover how to use JSON Schema with the Expressive Query Syntax [here](https://www.mongodb.com/blog/post/mongodb-36-json-schema-validation-expressive-query-syntax) and replicate the examples mentioned there.
+
+### Granular Array Updates Lab
+
+* The granular array updates lab is available [here](https://github.com/rlondner/mongodb-3.6-workshop/tree/master/labs/array-updates).
