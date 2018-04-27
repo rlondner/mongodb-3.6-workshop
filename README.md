@@ -32,7 +32,7 @@ But enough with marketing spins, letâ€™s get started with technical content. Weâ
 
 * Move on with a more complex and realistic [Node.js lab](https://github.com/rlondner/mongodb-3.6-workshop/tree/master/labs/change-streams/node).
 
-* Find out how to integrate change streams with Kafka in the [Change Streams Kafka producer lab](https://github.com/rlondner/mongodb-3.6-workshop/tree/master/labs/kafka).
+* Find out how to integrate change streams with Kafka in the [Change Streams Kafka producer lab](https://github.com/rlondner/mongodb-3.6-workshop/tree/master/labs/change-streams/kafka).
 
 ### JSON Schema Validation Labs
 
